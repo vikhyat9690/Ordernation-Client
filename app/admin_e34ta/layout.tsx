@@ -1,10 +1,22 @@
 'use client';
 
 import { ShoppingBag, Package, Users, Settings, BarChart3, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+// import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { getLocalStorage } from '../components/Helper';
+// import { Router } from 'next/router';
 
 export default function AdminLayout({ children }: any) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if(pathname.includes('/admin_e34ta') && !getLocalStorage('access-token')) {
+      router.replace('/admin_7s2u1/login');
+    }
+  }, [])
 
   const menuItems = [
     { icon: Package, label: 'Products', href: '/admin_e34ta/products' },
@@ -13,6 +25,14 @@ export default function AdminLayout({ children }: any) {
     { icon: BarChart3, label: 'Analytics', href: '/admin_e34ta/analytics' },
     { icon: Settings, label: 'Settings', href: '/admin_e34ta/settings' },
   ];
+
+  const modeSwitchHandler = () => {
+    router.replace('/')
+  }
+
+  const homePageRouter = () => {
+    router.replace('/admin_e34ta');
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -31,12 +51,13 @@ export default function AdminLayout({ children }: any) {
           transform transition-transform duration-300 ease-in-out
           lg:translate-x-0
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          w-1/4
         `}
       >
         <div className="p-6 border-b border-gray-800">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <ShoppingBag className="w-6 h-6" />
+              <ShoppingBag className="w-6 h-6 cursor-pointer" onClick={homePageRouter} />
             </div>
             <div>
               <h2 className="text-xl font-bold">Admin Panel</h2>
@@ -67,8 +88,8 @@ export default function AdminLayout({ children }: any) {
               CV
             </div>
             <div>
-              <p className="text-sm font-medium">Customer View</p>
-              <p className="text-xs text-gray-400">Admin Mode</p>
+              <p className="text-sm font-medium cursor-pointer" onClick={modeSwitchHandler}>Customer View</p>
+              <p className="text-xs text-gray-400 cursor-pointer">Admin Mode</p>
             </div>
           </div>
         </div>
@@ -82,21 +103,12 @@ export default function AdminLayout({ children }: any) {
         />
       )}
 
-      {/* Main content */}
-      <main className="lg:ml-64 min-h-screen">
-        <div className="p-6 lg:p-8">
-          {children || (
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Welcome to Admin Panel
-              </h1>
-              <p className="text-gray-600">
-                Select a menu item from the sidebar to get started.
-              </p>
-            </div>
-          )}
-        </div>
+      {/* MAIN DASHBOARD CONTENT */}
+      {/* MAIN RENDER OUTLET */}
+      <main className="lg:ml-64 p-8 min-h-screen">
+        {children}
       </main>
+
     </div>
   );
 }

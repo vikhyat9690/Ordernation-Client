@@ -25,3 +25,15 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Add this to your main global CSS file (e.g., globals.css) */
+html,
+body {
+  height: 100%;
+}
+
+/* Also, ensure the root element used by your framework is set to 100% */
+/* In Next.js, this might be the main div in your root layout */
+#__next { /* or whatever your root element ID/class is */
+  height: 100%;
+}

@@ -1,6 +1,9 @@
+'use client';
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ToastBar, Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,8 +23,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full`}
       >
+        <Toaster
+          position="top-left"
+          toastOptions={{
+            duration: 4000,
+          }}
+        >
+          {(t) => (
+            <ToastBar toast={t}>
+              {({ icon, message }) => (
+                <div className="flex items-center gap-2">
+                  {icon}
+                  {message}
+                </div>
+              )}
+            </ToastBar>
+          )}
+        </Toaster>
         {children}
       </body>
     </html>
